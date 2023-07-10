@@ -1,5 +1,6 @@
 def main():
     print("Loading migration.....")
+    print("Copying")
     print("Copy success")
 
 
