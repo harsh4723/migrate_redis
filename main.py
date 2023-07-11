@@ -1,4 +1,5 @@
 import redis
+import datetime
 
 print("Loading migration.....")
 
@@ -10,6 +11,8 @@ keys = source_redis.keys('*convo*')
 
 print("Len of keys",len(keys))
 
+start = datetime.datetime.now()
+
 for key in keys:
     value = source_redis.get(key)
     ttl = source_redis.ttl(key)
@@ -18,4 +21,8 @@ for key in keys:
     else:
         destination_redis.set(key, value)
 
-print("Copied Successfully")
+time_clocked = datetime.datetime.now() - start
+
+total_time = int(time_clocked.total_seconds())
+
+print("Copied Successfully total time taken",total_time)
