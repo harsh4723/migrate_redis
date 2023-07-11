@@ -1,8 +1,18 @@
-def main():
-    print("Loading migration.....")
-    print("Copying")
-    print("Copy success")
+import redis
 
+print("Loading migration.....")
 
-if __name__ == "__main__":
-    main()
+source_redis = redis.Redis(host='ub-ec.prod.eu-west-2.infra', port=6379, db=1)
+
+destination_redis = redis.Redis(host='reranker-ec.prod.eu-west-2.infra', port=6379, db=1)
+
+keys = source_redis.keys('*convo*')
+
+print("Len of keys",len(keys))
+
+for key in keys:
+    value = source_redis.get(key)
+    ttl = source_redis.ttl(key)
+    destination_redis.setex(key, ttl, value)
+
+print("Copied Successfully")
