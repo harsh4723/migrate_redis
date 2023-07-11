@@ -1,4 +1,5 @@
 import redis
+from datetime import timedelta
 
 print("Loading migration.....")
 
@@ -13,6 +14,7 @@ print("Len of keys",len(keys))
 for key in keys:
     value = source_redis.get(key)
     ttl = source_redis.ttl(key)
+    ttl_timedelta = timedelta(seconds=ttl)
     destination_redis.setex(key, ttl, value)
 
 print("Copied Successfully")
