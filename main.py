@@ -1,6 +1,8 @@
 import redis
 import datetime
 import concurrent.futures
+import pickle
+import numpy as np
 
 print("Loading migration.....")
 
@@ -18,10 +20,14 @@ start = datetime.datetime.now()
 def copy_key(key):
     value = source_redis.get(key)
     ttl = source_redis.ttl(key)
-    if ttl >=0:
-        destination_redis.setex(key, ttl, value)
+    query_vector = pickle.loads(value)
+    if np.max(query_vector[0]) == np.min(query_vector[0]) == 0.0:
+        pass
     else:
-        destination_redis.set(key, value)
+        if ttl >=0:
+            destination_redis.setex(key, ttl, value)
+        else:
+            destination_redis.set(key, value)
 
 
 max_threads = 100
