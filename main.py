@@ -8,7 +8,7 @@ source_redis = redis.Redis(host='ub-ec.prod.eu-west-2.infra', port=6379, db=1)
 
 destination_redis = redis.Redis(host='reranker-ec.prod.eu-west-2.infra', port=6379, db=1)
 
-keys = source_redis.keys('*convo*')
+keys = source_redis.keys('*generate_query_suggestions_azure*')
 
 print("Len of keys",len(keys))
 
