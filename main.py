@@ -8,7 +8,7 @@ source_redis = redis.Redis(host='ub-ec.prod.eu-west-2.infra', port=6379, db=1)
 
 destination_redis = redis.Redis(host='reranker-ec.prod.eu-west-2.infra', port=6379, db=1)
 
-keys = source_redis.keys('*generate_query_suggestions*')
+keys = source_redis.keys('ups*')
 
 print("Len of keys",len(keys))
 
@@ -24,7 +24,7 @@ def copy_key(key):
         destination_redis.set(key, value)
 
 
-max_threads = 10
+max_threads = 50
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
     futures = [executor.submit(copy_key, key) for key in keys]
